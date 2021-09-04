@@ -19,18 +19,20 @@ refs.input.addEventListener('input', _.debounce(createListCountryHandler, 500));
 function createListCountryHandler(e) {
 
     clearListItems()
-    const searchQuery = e.target.value;
+    const searchQuery = e.target.value.trim();
     serviceFetchCountries.fetchCountries(searchQuery)
         .then(data => {
+            data.trim();
             if (data.length > 10) {
                 PNotify.error({
                     text: "Too many matches found. Please enter a more specific query!"
                 });
-            } else if (data.status === 404) {
-                PNotify.error({
-                    text: "No country has been found. Please enter a more specific query!"
-                });
-            } else if (data.length === 1) {
+            } // else if (data.status === 404) {
+            //  PNotify.error({
+            //    text: "No country has been found. Please enter a more specific query!"
+            //    });
+            // }
+            else if (data.length === 1) {
                 buildListMarkup(data, oneCountryInfo);
             } else if (data.length <= 10) {
                 buildListMarkup(data, countryList);
@@ -52,4 +54,3 @@ function buildListMarkup(countrys, template) {
 function clearListItems() {
     refs.listCountry.innerHTML = '';
 }
-

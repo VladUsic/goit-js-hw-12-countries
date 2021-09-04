@@ -2,11 +2,15 @@
 
 const baseUrl = 'https://restcountries.eu/rest/v2/name/';
 
-export default {
-    fetchCountries(query) {
-        const requestParams = `${query}`;
 
-        return fetch(baseUrl + requestParams)
-            .then(response => response.json())
+export default function fetchCountries(query) {
+    if (query) {
+        return fetch(baseUrl + requestParams).then(response => {
+                if (response.ok) return response.json();
+                throw new Error('Error fetching data');
+            })
+            .catch(error => {
+                console.error('Error: ', error);
+            });
     }
 }
